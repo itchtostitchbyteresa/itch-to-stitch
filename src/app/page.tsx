@@ -7,6 +7,7 @@ import { ALL_TAGS, POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
 
 
+
 type TagChipProps = {
 active: boolean;
 children: React.ReactNode;
@@ -96,34 +97,27 @@ return (
           loading="lazy"
         />
       );
-      return item.href ? (
-        <a
-          key={i}
-          href={item.href}
-          className="group block rounded-lg overflow-hidden ring-1 ring-rose-200/60 hover:ring-rose-400"
-          title={item.alt}
-        >
-          {Img}
-        </a>
-      ) : (
-        <div
-          key={i}
-          className="group rounded-lg overflow-hidden ring-1 ring-rose-200/60"
-          title={item.alt}
-        >
-          {Img}
-        </div>
-      );
+  return item.href ? (
+  <Link
+    key={i}
+    href={item.href}
+    className="group block rounded-lg overflow-hidden ring-1 ring-rose-200/60 hover:ring-rose-400"
+    title={item.alt}
+  >
+    {Img}
+  </Link>
+) : (
+  <div
+    key={i}
+    className="group rounded-lg overflow-hidden ring-1 ring-rose-200/60"
+    title={item.alt}
+  >
+    {Img}
+  </div>
+);
     })}
   </div>
 </section>
-
-
-
-
-
-
-
 
 
 
