@@ -23,10 +23,13 @@ export function Header() {
 
         {/* Logo + title on the right */}
         <Link href="/" className="flex items-center gap-3">
+        <span className={`text-2xl ${pacifico.className} text-rose-700`}>
+            {SITE_TITLE}
+          </span>
           <img
             src={LOGO_URL}
             alt="Logo"
-            className="h-30 w-30 rounded-full border border-rose-200"
+            className="h-20 w-20 rounded-full border border-rose-200"
           />
       
         </Link>

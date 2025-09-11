@@ -70,8 +70,8 @@ return POSTS.filter(
 }, [activeTag, q]);
 
 const GALLERY: { src: string; alt: string; href?: string }[] = [
-  { src: "https://res.cloudinary.com/dl7fmgr2s/image/upload/f_auto,q_auto,w_220,h_220,c_fill,g_auto/20200514_124755_g2ytco.jpg", alt: "Bag - sunburst", href: "/posts/granny-square-basics" },
-  { src: "https://res.cloudinary.com/dl7fmgr2s/image/upload/f_auto,q_auto,w_220,h_220,c_fill,g_auto/20200514_124755_g2ytco.jpg", alt: "Beanie - mustard" },
+  { src: "https://res.cloudinary.com/dl7fmgr2s/image/upload/v1757618999/owl_wreath_full_f5kpid.jpg", alt: "Wreath - autumn", 
+    href: "/posts/fall-wreath-notes" },
   // ...add as many as you want
 ];
 
