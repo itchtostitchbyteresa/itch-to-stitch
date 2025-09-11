@@ -41,7 +41,7 @@ const POSTS: Post[] = [
     excerpt:
       'My go-to method for neat corners and a flat join, plus yarn choices I like for durable squares.',
     cover:
-      'https://images.unsplash.com/photo-1520975661595-6453be3f7070?q=80&w=1600&auto=format&fit=crop',
+      'https://res.cloudinary.com/dl7fmgr2s/image/upload/v1757607330/20200514_124755_g2ytco.jpg',
     html: `
       <p>Everyone has their way to start a square. I’m a <em>magic ring</em> person—less bulk, cleaner center.</p>
       <h3 class="text-lg font-semibold mt-6">Hook & yarn</h3>
