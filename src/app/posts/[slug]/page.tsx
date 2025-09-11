@@ -22,7 +22,7 @@ export default function PostPage({ params }: { params: { slug: string } }) {
           <img
             src={post.cover}
             alt={`Cover for ${post.title}`}
-            className="rounded-xl mt-6"
+            className="rounded-xl mt-6 max-w-xl mx-auto"
           />
           {/* eslint-disable-next-line react/no-danger */}
           <div
