@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { POSTS, formatDateISO, SITE_TITLE } from "@/lib/posts";
 import { Header } from "@/components/Header";
 import { Pacifico } from "next/font/google";
+import Link from "next/link";
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
 
 export default function PostPage({ params }: { params: { slug: string } }) {
@@ -30,10 +31,10 @@ export default function PostPage({ params }: { params: { slug: string } }) {
           />
         </article>
         <div className="mt-10">
-          <a href="/" className="underline">
-            ← Back to posts
-          </a>
-        </div>
+  <Link href="/" className="underline">
+    ← Back to posts
+  </Link>
+</div>
       </main>
       <footer className="text-center text-xs text-gray-500 py-12">
         © {new Date().getFullYear()} {SITE_TITLE} • Built with ❤️ and Next.js
