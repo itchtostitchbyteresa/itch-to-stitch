@@ -5,9 +5,24 @@ import { Nunito, Pacifico } from "next/font/google";
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-body" });
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400", variable: "--font-brand" });
 
+const siteName = "Itch To Stitch by Teresa";
+const siteUrl = "https://itchtostitchbyTeresa.com"; 
+
 export const metadata: Metadata = {
-  title: "Itch To Stitch by Teresa",
-  description: "Crochet notes, colors, and cozy experiments.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteName,
+    template: "%s • Itch To Stitch",
+  },
+  description: "Crochet notes, tutorials, and cozy experiments.",
+  openGraph: {
+    type: "website",
+    siteName,
+    url: siteUrl,
+    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: siteName }],
+  },
+  twitter: { card: "summary_large_image" },
+  alternates: { canonical: siteUrl },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
