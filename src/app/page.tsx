@@ -17,8 +17,7 @@ onClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 
-type PostCardProps = { post: import('@/lib/posts').Post };
-
+type PostCardProps = { post: import('@/lib/posts').Post; showTags?: boolean };
 
 function TagChip({ active, children, onClick }: TagChipProps) {
 return (
@@ -34,7 +33,7 @@ className={
 );
 }
 
-function PostCard({ post }: PostCardProps) {
+function PostCard({ post, showTags = false }: PostCardProps) {
 return (
 <Link
 href={`/posts/${post.slug}`}
@@ -48,11 +47,15 @@ className="group block rounded-2xl overflow-hidden bg-white shadow hover:shadow-
 <h3 className="mt-1 font-semibold">{post.title}</h3>
 <p className="mt-2 text-sm text-gray-600 line-clamp-2">{post.excerpt}</p>
 <div className="mt-3 flex flex-wrap gap-2">
-{post.tags.map((t) => (
-<span key={t} className="text-xs px-2 py-0.5 rounded-full border border-gray-200 text-gray-600">
-{t}
-</span>
-))}
+{showTags && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {post.tags.map((t) => (
+            <span key={t} className="text-xs px-2 py-0.5 rounded-full border border-gray-200 text-gray-600">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
 </div>
 </div>
 </Link>

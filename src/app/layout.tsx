@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import { Nunito, Pacifico } from "next/font/google";
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-body" });
-const pacifico = Pacifico({ subsets: ["latin"], weight: "400", variable: "--font-brand" });
+const pacifico = Pacifico({ subsets: ["latin"], weight: "400", variable: "--font-pacifico" });
+
+
+
 
 const siteName = "Itch To Stitch by Teresa";
 const siteUrl = "https://itchtostitchbyTeresa.com"; 
@@ -28,10 +31,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${nunito.variable} font-sans bg-[#faf7f2]`}>
+      <body className={`${nunito.variable} ${pacifico.variable} font-sans bg-[#faf7f2]`}>
         {children}
       </body>
     </html>
+    
   );
 }
 
