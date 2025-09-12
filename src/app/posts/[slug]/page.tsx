@@ -5,8 +5,11 @@ import { Pacifico } from "next/font/google";
 import Link from "next/link";
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
 
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = POSTS.find((p) => p.slug === params.slug);
+type Params = { slug: string };
+
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const { slug } = await params;                
+  const post = POSTS.find(p => p.slug === slug);  
   if (!post) return notFound();
 
   return (

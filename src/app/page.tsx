@@ -3,8 +3,10 @@
 
 import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ALL_TAGS, POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
+import { POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
+
+const ALL_TAGS: string[] = ["all", ...Array.from(new Set(POSTS.flatMap(p => p.tags)))];
 
 
 
