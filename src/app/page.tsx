@@ -166,34 +166,53 @@ className="w-full md:w-72 rounded-2xl border border-gray-200 bg-white px-4 py-2 
 
 
 {/* Subscribe blurb */}
-<section className="mt-14 rounded-2xl border border-gray-200 bg-white p-6">
-<h3 className="font-semibold text-lg">Get new posts</h3>
-<p className="text-gray-600 mt-1">I’ll send an occasional note when something new lands.</p>
-<form
-  action="https://buttondown.email/api/emails/embed-subscribe/itchtostitchbyteresa"
-  method="post"
-  target="popupwindow"
-  onSubmit={() => window.open('https://buttondown.email/itchtostitchbyteresa', 'popupwindow')}
-  className="mt-4 flex gap-2"
->
-  <input
-    type="email"
-    name="email"
-    required
-    placeholder="you@example.com"
-    className="w-full md:w-72 rounded-2xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
-  />
-  <input type="hidden" name="embed" value="1" />
-  <button
-    type="submit"
-    className="px-4 py-2 rounded-xl bg-black text-white"
-  >
-    Subscribe
-  </button>
-</form>
-<p className="mt-2 text-xs text-gray-500">
-  No spam. Unsubscribe anytime.
-</p>
+<section className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* Subscribe */}
+  <div className="rounded-2xl border border-gray-200 bg-white p-6">
+    <h3 className="font-semibold text-lg">Get new posts</h3>
+    <p className="text-gray-600 mt-1">
+      Occasional notes when something new lands.
+    </p>
+    <form
+      action="https://buttondown.email/api/emails/embed-subscribe/YOUR_BUTTONDOWN_USERNAME"
+      method="post"
+      className="mt-4 flex gap-2"
+    >
+      <input type="hidden" name="embed" value="1" />
+      <input
+        type="email"
+        name="email"
+        required
+        placeholder="you@example.com"
+        className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
+      />
+      <button
+        type="submit"
+        className="px-4 py-2 rounded-xl bg-black text-white"
+      >
+        Subscribe
+      </button>
+    </form>
+    <p className="mt-2 text-xs text-gray-500">No spam. Unsubscribe anytime.</p>
+  </div>
+
+  {/* Contact */}
+  <div className="rounded-2xl border border-gray-200 bg-white p-6">
+    <h3 className="font-semibold text-lg">Say hi</h3>
+    <p className="text-gray-600 mt-1">
+      Questions, ideas, or friendly yarn chat.
+    </p>
+    <div className="mt-4 flex gap-3">
+      <Link
+        href="/contact"
+        className="px-4 py-2 rounded-xl bg-black text-white"
+      >
+        Contact page
+      </Link>
+      
+     
+    </div>
+  </div>
 </section>
 </main>
 

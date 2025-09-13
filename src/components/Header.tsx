@@ -80,7 +80,7 @@ export function Header() {
           <nav className="flex gap-6 text-sm">
             <Link href="/" className="hover:underline">Home</Link>
             <Link href="/about" className="hover:underline">About</Link>
-            <Link href="/contact" className="hover:underline">Contact</Link>
+            {/*<Link href="/contact" className="hover:underline">Contact</Link>*/}
           </nav>
 
           {/* Center: Socials */}
