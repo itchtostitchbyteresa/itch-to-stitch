@@ -11,5 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${base}/posts/${p.slug}`,
       lastModified: new Date(p.date),
     })),
+    { url: `${base}/subscribe-success`, lastModified: new Date() },
   ];
 }

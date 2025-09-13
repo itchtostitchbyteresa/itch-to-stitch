@@ -160,11 +160,40 @@ className="w-full md:w-72 rounded-2xl border border-gray-200 bg-white px-4 py-2 
 </section>
 
 
+
+
+
+
+
 {/* Subscribe blurb */}
 <section className="mt-14 rounded-2xl border border-gray-200 bg-white p-6">
 <h3 className="font-semibold text-lg">Get new posts</h3>
 <p className="text-gray-600 mt-1">I’ll send an occasional note when something new lands.</p>
-<a href="mailto:you@example.com?subject=Subscribe%20me%20to%20Itch%20To%20Stitch" className="inline-block mt-4 px-4 py-2 rounded-xl bg-black text-white">Subscribe by email</a>
+<form
+  action="https://buttondown.email/api/emails/embed-subscribe/itchtostitchbyteresa"
+  method="post"
+  target="popupwindow"
+  onSubmit={() => window.open('https://buttondown.email/itchtostitchbyteresa', 'popupwindow')}
+  className="mt-4 flex gap-2"
+>
+  <input
+    type="email"
+    name="email"
+    required
+    placeholder="you@example.com"
+    className="w-full md:w-72 rounded-2xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
+  />
+  <input type="hidden" name="embed" value="1" />
+  <button
+    type="submit"
+    className="px-4 py-2 rounded-xl bg-black text-white"
+  >
+    Subscribe
+  </button>
+</form>
+<p className="mt-2 text-xs text-gray-500">
+  No spam. Unsubscribe anytime.
+</p>
 </section>
 </main>
 
