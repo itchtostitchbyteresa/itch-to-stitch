@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Pacifico } from "next/font/google";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Comments } from "@/components/Comments";
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
 
 type Params = { slug: string };
@@ -64,6 +65,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           />
         </article>
         <div className="mt-10">
+        <Comments slug={post.slug} />
   <Link href="/" className="underline">
     ← Back to posts
   </Link>
