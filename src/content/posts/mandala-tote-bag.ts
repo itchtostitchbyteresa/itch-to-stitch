@@ -3,7 +3,7 @@ const post = {
 slug: "tote-bag",
   title: "Crochet Tote Bag ",
   date: "2025-08-15", 
-  tags: ["tote", "bag", "inspiration","mandala","crochet","gift","rosette"],
+  tags: ["tote", "bag", "inspiration","mandala","crochet","gift"],
   excerpt:
     "A dash of color in your every day errands.🧺 ",
   cover:
@@ -20,7 +20,7 @@ slug: "tote-bag",
      alt="crochet rosette tote bag"
      class="w-full md:w-1/3 rounded-xl" />
     <p class="text-gray-700 leading-relaxed">
-    The rosette was the center of a crochet blanket that I never finished. It was too beautiful to frog it, 
+    This was the center of a crochet blanket that I never finished. It was too beautiful to frog it, 
     so I decided to give it another use. Unfortunately, I lost the original pattern.😭
     </p>
 </div>

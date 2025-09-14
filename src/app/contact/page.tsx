@@ -92,13 +92,13 @@ export default function Page() {
           {/* Optional: show where the form is coming from */}
           <input type="hidden" name="page" value="contact" />
 
-          <button
-            type="submit"
-            disabled={status === 'sending'}
-            className="px-5 py-3 rounded-xl bg-black text-white disabled:opacity-60"
-          >
-            {status === 'sending' ? 'Sending…' : 'Send'}
-          </button>
+        <button
+  type="submit"
+  disabled={status === "sending"}
+  className="px-5 py-3 rounded-xl bg-rose-900 text-white hover:bg-rose-950 disabled:opacity-60"
+>
+  {status === "sending" ? "Sending…" : "Send"}
+</button>
 
           {status !== 'idle' && (
             <p

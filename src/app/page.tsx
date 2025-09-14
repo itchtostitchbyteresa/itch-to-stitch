@@ -1,12 +1,13 @@
 'use client';
 
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
 
-const ALL_TAGS: string[] = ["all", ...Array.from(new Set(POSTS.flatMap(p => p.tags)))];
+
+
 
 
 
@@ -24,8 +25,10 @@ return (
 <button
 onClick={onClick}
 className={
-'px-3 py-1 rounded-2xl text-xs border transition shadow-sm ' +
-(active ? 'bg-black text-white border-black' : 'bg-white border-gray-200 hover:border-gray-300')
+  'px-3 py-1 rounded-2xl text-xs border transition shadow-sm ' +
+  (active
+    ? 'bg-rose-900 text-white hover:bg-rose-950 border-rose-900'
+    : 'bg-white border-gray-200 hover:border-gray-300')
 }
 >
 {children}
@@ -44,7 +47,7 @@ className="group block rounded-2xl overflow-hidden bg-white shadow hover:shadow-
 </div>
 <div className="p-4">
 <div className="text-xs text-gray-500">{formatDateISO(post.date)}</div>
-<h3 className="mt-1 font-semibold">{post.title}</h3>
+<h3 className="mt-1 font-semibold text-rose-900">{post.title}</h3>
 <p className="mt-2 text-sm text-gray-600 line-clamp-2">{post.excerpt}</p>
 <div className="mt-3 flex flex-wrap gap-2">
 {showTags && (
@@ -65,6 +68,19 @@ className="group block rounded-2xl overflow-hidden bg-white shadow hover:shadow-
 export default function Page() {
 const [activeTag, setActiveTag] = useState<string>('all');
 const [q, setQ] = useState<string>('');
+const TOP_N_TAGS = 6;
+
+const topTags = useMemo(() => {
+  const counts: Record<string, number> = {};
+  for (const p of POSTS) for (const t of p.tags) counts[t] = (counts[t] || 0) + 1;
+
+  const sorted = Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])      // most posts first
+    .slice(0, TOP_N_TAGS)
+    .map(([t]) => t);
+
+  return ['all', ...sorted];
+}, []);
 
 
 const list = useMemo(() => {
@@ -130,11 +146,11 @@ return (
 {/* Controls */}
 <section className="mt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 <div className="flex flex-wrap gap-2">
-{ALL_TAGS.map((t) => (
-<TagChip key={t} active={t === activeTag} onClick={() => setActiveTag(t)}>
-{t}
-</TagChip>
-))}
+  {topTags.map((t) => (
+    <TagChip key={t} active={t === activeTag} onClick={() => setActiveTag(t)}>
+      {t}
+    </TagChip>
+  ))}
 </div>
 <div className="relative">
 <input
@@ -186,12 +202,12 @@ className="w-full md:w-72 rounded-2xl border border-gray-200 bg-white px-4 py-2 
         placeholder="you@example.com"
         className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
       />
-      <button
-        type="submit"
-        className="px-4 py-2 rounded-xl bg-black text-white"
-      >
-        Subscribe
-      </button>
+    <button
+  type="submit"
+  className="px-4 py-2 rounded-xl bg-rose-900 text-white hover:bg-rose-950"
+>
+  Subscribe
+</button>
     </form>
     <p className="mt-2 text-xs text-gray-500">No spam. Unsubscribe anytime.</p>
   </div>
@@ -205,7 +221,7 @@ className="w-full md:w-72 rounded-2xl border border-gray-200 bg-white px-4 py-2 
     <div className="mt-4 flex gap-3">
       <Link
         href="/contact"
-        className="px-4 py-2 rounded-xl bg-black text-white"
+        className="px-4 py-2 rounded-xl bg-rose-900 text-white hover:bg-rose-950 text-white"
       >
         Contact page
       </Link>

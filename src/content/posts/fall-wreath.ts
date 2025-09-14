@@ -63,7 +63,7 @@ slug: "fall-wreath",
   <div class="md:w-2/3">
     <p class="text-gray-700 leading-relaxed">
       For yarn, I used <strong>Loops & Threads Impeccable</strong> leftovers: <em>Red Hot, Pumpkin, Golden Beige, Forest, 
-Lemon, Sunny Day,</em> and <em>Green Lagoon.</em> I worked everything with a <strong>4.5 mm hook</strong>. I didn’t bother 
+Lemon, Sunny Day,</em> and <em>Green Lagoon.</em> I worked everything with a <strong>4.5 mm crochet hook</strong>. I didn’t bother 
 with gauge or matching the exact sizes from the inspiration pattern. 
 I just made a leaf, liked how it looked, and kept going from there.😅
     </p>
