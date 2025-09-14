@@ -1,6 +1,6 @@
 import type { Post } from "@/lib/types";
 import fallWreath from "./posts/fall-wreath";
-import toteBag from "./posts/mandala-tote-bag";
+import toteBag from "./posts/tote-bag";
 import sunflowerPillow from "./posts/sunflower-pillow";
 
 export const POSTS: Post[] = [

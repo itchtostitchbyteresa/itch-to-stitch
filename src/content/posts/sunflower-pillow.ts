@@ -1,6 +1,6 @@
 const post = {
 
-slug: "snflower-pillow",
+slug: "sunflower-pillow",
   title: "Giant Sunflower Pillow",
   date: "2025-06-20", 
   tags: ["sun", "sunflower", "inspiration","pillow","crochet","bulky"],
@@ -51,7 +51,7 @@ slug: "snflower-pillow",
 
   <div class="flex flex-col md:flex-row items-center gap-6 my-8">
     <img src="https://res.cloudinary.com/dl7fmgr2s/image/upload/v1757815196/detail_brown_center_sunflower_yqbvgl.jpg"
-     alt="details autumn wreath"
+     alt="details center brown sunflower"
      class="w-full md:w-1/3 rounded-xl" />
     <p class="text-gray-700 leading-relaxed">
     My flower ended up a little bigger with 12 petals instead of 10. Because of this I had to also make a larger center circle. 
