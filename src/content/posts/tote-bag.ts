@@ -11,7 +11,7 @@ slug: "tote-bag",
   html: `
   
   <p class="text-center">A dash of color in your every day errands.🧺</p>
-<p class="text-center">A great gift that uses leftover yarn.</p>
+<p class="text-center">A great gift to use the leftover yarn.</p>
     
   <h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">The Rosette</h2>
 

@@ -7,11 +7,11 @@ slug: "fall-wreath",
   excerpt:
     "A cozy circle of yarn and leaves.🍂",
   cover:
-    "https://res.cloudinary.com/dl7fmgr2s/image/upload/v1757618999/owl_wreath_full_f5kpid.jpg",
+    "https://res.cloudinary.com/dl7fmgr2s/image/upload/fl_strip_profile,q_auto/owl_wreath_full_f5kpid.jpg",
   html: `
 
   <p class="text-center">A cozy circle of yarn and leaves.🍂</p>
-  <p class="text-center">Made with leftover yarn and some online inspiration.</p>
+  <p class="text-center">Borrowed the idea, made it my own.</p>
     
   <h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">The Inspiration</h2>
 

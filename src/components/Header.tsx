@@ -76,12 +76,17 @@ export function Header() {
 
         {/* Desktop row: 3 columns */}
         <div className="hidden md:grid md:grid-cols-3 md:items-center">
-          {/* Left: Nav */}
-          <nav className="flex gap-6 text-sm">
-            <Link href="/" className="hover:underline">Home</Link>
-            <Link href="/about" className="hover:underline">About</Link>
-            {/*<Link href="/contact" className="hover:underline">Contact</Link>*/}
-          </nav>
+          {/* Left: Logo + Title (moved here) */}
+          <Link href="/" className="flex items-center gap-3">
+            <img
+              src={LOGO_URL}
+              alt="Logo"
+              className="h-16 w-16 rounded-full border border-rose-200"
+            />
+            <span className={`text-2xl ${pacifico.className} text-rose-700`}>
+              {SITE_TITLE}
+            </span>
+          </Link>
 
           {/* Center: Socials */}
           <div className="flex justify-center items-center gap-3 text-rose-700">
@@ -110,17 +115,12 @@ export function Header() {
             </SocialLink>
           </div>
 
-          {/* Right: Logo + Title */}
-          <Link href="/" className="flex items-center gap-3 justify-end">
-            <img
-              src={LOGO_URL}
-              alt="Logo"
-              className="h-16 w-16 rounded-full border border-rose-200"
-            />
-            <span className={`text-2xl ${pacifico.className} text-rose-700`}>
-              {SITE_TITLE}
-            </span>
-          </Link>
+          {/* Right: Nav (moved here) */}
+          <nav className="flex gap-6 text-sm justify-self-end">
+            <Link href="/" className="hover:underline">Home</Link>
+            <Link href="/about" className="hover:underline">About</Link>
+            {/* <Link href="/contact" className="hover:underline">Contact</Link> */}
+          </nav>
         </div>
 
         {/* Mobile dropdown */}
