@@ -58,7 +58,7 @@ slug: "sunflower-pillow",
     But I just added a couple of more rows to the original instructions and it was fine.😉 My finished pillow is about 25 inches across (the original pattern is around 19 inches).  </p>
 </div>
 
-<h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">Sidequest</h2>
+
 
 
 
