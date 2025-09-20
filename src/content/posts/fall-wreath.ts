@@ -11,7 +11,6 @@ slug: "fall-wreath",
   html: `
 
   <p class="text-center">A cozy circle of yarn and leaves.🍂</p>
-  <p class="text-center">Borrowed the idea, made it my own.</p>
     
   <h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">The Inspiration</h2>
 
@@ -20,9 +19,9 @@ slug: "fall-wreath",
      alt="inspiration fall wreath"
      class="w-full md:w-1/3 rounded-xl" />
     <p class="text-gray-700 leading-relaxed">
-    I used the Fabulous Fall Wreath as inspiration. You can get the pattern 
-    for free on <a href="https://www.yarnspirations.com/en-ca/products/red-heart-fabulous-fall-wreath" 
-    target="_blank" class="underline text-rose-700 hover:text-rose-900">Yarnspirations.com</a>.</p>
+    I used the free pattern <a href="https://www.yarnspirations.com/en-ca/products/red-heart-fabulous-fall-wreath" 
+    target="_blank" class="underline text-rose-700 hover:text-rose-900">
+    Fabulous Fall Wreath</a> as inspiration.</p>
 </div>
 
 <h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">Frame</h2>
@@ -30,11 +29,13 @@ slug: "fall-wreath",
 <div class="flex flex-col md:flex-row items-center gap-6 my-8">
   <div class="md:w-2/3">
     <p class="text-gray-700 leading-relaxed">
+      <ul class="list-disc pl-5 space-y-1">
+  <li>
       For the frame, I used a simple <strong>metal wreath ring, 14 inches in diameter.</strong> 
       I grabbed mine at Dollarama, but you can find similar ones on 
       <a href="https://www.amazon.ca/Firlar-Wreath-Valentines-Wedding-Decoration/dp/B08T1M46N5/ref=asc_df_B08T1M46N5?mcid=1dd068fdea34393c9e1323b4495383e9&tag=googleshopc0c-20&linkCode=df0&hvadid=706725854862&hvpos=&hvnetw=g&hvrand=11067853612871393448&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9198282&hvtargid=pla-2321882202954&hvocijid=11067853612871393448-B08T1M46N5-&hvexpln=0&gad_source=1&th=1" 
       target="_blank" class="underline text-rose-700 hover:text-rose-900">Amazon.ca</a>, or any online craft shop.
-    </p>
+    </li></p>
   </div>
   <div class="md:w-1/3">
     <img 
@@ -52,9 +53,16 @@ slug: "fall-wreath",
      alt="details autumn wreath"
      class="w-full md:w-1/3 rounded-xl" />
     <p class="text-gray-700 leading-relaxed">
-    To cover it, I used a bulky cream yarn I’d found in a “mystery savings bag” at Value Village.😁I simply wrapped it all
-    the way around the ring until it was covered. You could also crochet stitches around the frame if you prefer.
-    The only thing that matters is that the entire base disappears under yarn so you have something solid.</p>
+      <ul class="list-disc pl-5 space-y-1">
+  <li>
+    To cover the metal frame, I used a bulky cream yarn I’d found in one of my “mystery savings bag” at Value Village.😁
+    I simply wrapped the yarn all
+    the way around the ring until it was all covered.  </li>
+     <li>
+    You could also crochet stitches around the frame if you prefer.
+    The only thing that matters is that the entire base disappears under yarn so you have something solid to work on.
+     </li>
+    </p>
 </div>
 
 <h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">Yarn</h2>
@@ -62,10 +70,13 @@ slug: "fall-wreath",
 <div class="flex flex-col md:flex-row items-center gap-6 my-8">
   <div class="md:w-2/3">
     <p class="text-gray-700 leading-relaxed">
-      For yarn, I used <strong>Loops & Threads Impeccable</strong> leftovers: <em>Red Hot, Pumpkin, Golden Beige, Forest, 
-Lemon, Sunny Day,</em> and <em>Green Lagoon.</em> I worked everything with a <strong>4.5 mm crochet hook</strong>. I didn’t bother 
-with gauge or matching the exact sizes from the inspiration pattern. 
-I just made a leaf, liked how it looked, and kept going from there.😅
+     <ul class="list-disc pl-5 space-y-1">
+  <li>
+    I used <strong>Loops & Threads Impeccable</strong> leftovers: <em>Red Hot, Pumpkin, Golden Beige, Forest, 
+Lemon, Sunny Day,</em> and <em>Green Lagoon.</em> I worked everything with a <strong>4.5 mm crochet hook</strong>.
+ </li>
+ <li>I didn’t bother 
+with gauge. I just made a leaf, liked how it looked, and kept going from there.😅 </li>
     </p>
   </div>
   <div class="md:w-1/3">
@@ -84,18 +95,26 @@ I just made a leaf, liked how it looked, and kept going from there.😅
      class="w-full md:w-1/3 rounded-xl" />
 
     <p class="text-gray-700 leading-relaxed">
+     <ul class="list-disc pl-5 space-y-1">
+  <li>
     My wreath has more of the <strong>five-point </strong> leaves and the <strong>grape </strong> leaves, and fewer of 
     the <strong>single-point</strong> style. That made it look a little busier than the original recipe. I wanted it to feel 
-    full and slightly wild, like a bundle of real leaves. You know, messy.🙃You could make different 
-    choices with your leaf mix to get a tidier look more close to the original if that’s what you prefer. For the <strong>acorns
+    full and slightly wild, like a bundle of real leaves. You know, messy. 🙃 You can make different 
+    choices with your leaf mix to get a tidier look more close to the original if that’s what you prefer.
+     </li>
+ <li>
+     For the <strong>acorns
     and the larger grapes</strong>, I used leftover yarn scraps as stuffing (use any filling you have). 
+     </li>
+      <li>
     I hot-glued some leaves to the base and sewed the rest on top of each other.
+     </li>
 </p>
 </div>
 
-<p class="text-center">For more inspiration you can check
+<p class="text-center">You can check
 <a href="https://www.ravelry.com/patterns/library/fabulous-fall-wreath" target="_blank" 
-class="underline text-rose-700 hover:text-rose-900">Ravelry.com</a> for other versions of this same wreath.🔥</p>
+class="underline text-rose-700 hover:text-rose-900">Ravelry.com</a> for other variations of this wreath.🔥</p>
 
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-12">
   <img 
