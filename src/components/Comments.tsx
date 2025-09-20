@@ -1,205 +1,285 @@
 'use client';
 
-import * as React from 'react';
-import { supabase } from '@/lib/supabase';
-import { Pacifico } from "next/font/google";
-const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Pacifico } from 'next/font/google';
+import { getSupabaseClient } from '@/lib/supabase';
+import type { PostgrestError } from '@supabase/supabase-js';
 
-type Row = {
+const pacifico = Pacifico({ subsets: ['latin'], weight: '400' });
+
+type CommentRow = {
   id: string;
   slug: string;
   name: string | null;
   message: string;
-  created_at: string;
+  created_at: string;     // timestamptz
   parent_id: string | null;
 };
 
-const load = React.useCallback(() => { /* ... */ }, []);
-React.useEffect(() => { load(); }, [load]);
+// Build a nested tree from the flat rows
+function buildTree(rows: CommentRow[]) {
+  const byId = new Map<string, CommentRow & { children: CommentRow[] }>();
+  rows.forEach((r) => byId.set(r.id, { ...r, children: [] }));
+  const roots: (CommentRow & { children: CommentRow[] })[] = [];
+
+  for (const node of byId.values()) {
+    if (node.parent_id && byId.has(node.parent_id)) {
+      byId.get(node.parent_id)!.children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+}
+
+function fmtDate(iso: string) {
+  try {
+    return new Date(iso).toLocaleString(undefined, {
+      year: 'numeric', month: 'short', day: '2-digit',
+      hour: '2-digit', minute: '2-digit',
+    });
+  } catch {
+    return iso;
+  }
+}
 
 export function Comments({ slug }: { slug: string }) {
-  const [items, setItems] = React.useState<Row[]>([]);
-  const [name, setName] = React.useState('');
-  const [msg, setMsg] = React.useState('');
-  const [sending, setSending] = React.useState(false);
-  const [err, setErr] = React.useState<string | null>(null);
-  const [replyingTo, setReplyingTo] = React.useState<string | null>(null);
+  const supabase = useMemo(() => getSupabaseClient(), []);
+  const [rows, setRows] = useState<CommentRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  async function load() {
-    const { data, error } = await supabase
-      .from('comments')
-      .select('id,slug,name,message,created_at,parent_id')
-      .eq('slug', slug)
-      .order('created_at', { ascending: true });
+  // New comment (top-level)
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
+  const msgRef = useRef<HTMLTextAreaElement | null>(null);
 
-    if (!error && data) setItems(data as Row[]);
-  }
+  // Reply box state (only one open at a time)
+  const [replyTo, setReplyTo] = useState<string | null>(null);
+  const [replyName, setReplyName] = useState('');
+  const [replyMessage, setReplyMessage] = useState('');
+  const replyRef = useRef<HTMLTextAreaElement | null>(null);
 
-  React.useEffect(() => { load(); }, [slug]);
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data, error: err } = await supabase
+        .from('comments')
+        .select('*')
+        .eq('slug', slug)
+        .order('created_at', { ascending: true }) as {
+          data: CommentRow[] | null;
+          error: PostgrestError | null;
+        };
 
-  async function createComment(message: string, parent_id: string | null, authorName?: string) {
-    if (!message.trim()) return;
-    setSending(true);
-    setErr(null);
-
-    const { error } = await supabase.from('comments').insert({
-      slug,
-      name: (authorName ?? name).trim() || null,
-      message: message.trim(),
-      parent_id,
-    });
-
-    setSending(false);
-    if (error) { setErr('Could not post. Try again.'); return; }
-
-    if (!parent_id) setMsg('');
-    setReplyingTo(null);
-    await load();
-  }
-
-  function ReplyEditor({ parentId, onDone }: { parentId: string; onDone: () => void }) {
-    // Local state so typing here doesn't touch the rest of the tree
-    const [rName, setRName] = React.useState('');
-    const [rMsg, setRMsg] = React.useState('');
-    const [busy, setBusy] = React.useState(false);
-    const [localErr, setLocalErr] = React.useState<string | null>(null);
-
-    async function submit(e: React.FormEvent) {
-      e.preventDefault();
-      if (!rMsg.trim()) return;
-      setBusy(true);
-      setLocalErr(null);
-      const { error } = await supabase.from('comments').insert({
-        slug,
-        name: rName.trim() || null,
-        message: rMsg.trim(),
-        parent_id: parentId,
-      });
-      setBusy(false);
-      if (error) { setLocalErr('Could not post. Try again.'); return; }
-      setRMsg('');
-      onDone();
-      await load();
+      if (err) throw err;
+      setRows(data ?? []);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to load comments');
+    } finally {
+      setLoading(false);
     }
+  }, [slug, supabase]);
 
-    return (
-      <form onSubmit={submit} className="mt-3 space-y-2" key={`reply-${parentId}`}>
-        <input
-          value={rName}
-          onChange={(e) => setRName(e.target.value)}
-          placeholder="Name (optional)"
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
-        />
-        <textarea
-          value={rMsg}
-          onChange={(e) => setRMsg(e.target.value)}
-          required
-          rows={3}
-          placeholder="Write a reply…"
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
-        />
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={busy || !rMsg.trim()}
-            className="px-3 py-2 rounded-lg bg-black text-white disabled:opacity-60"
-          >
-            {busy ? 'Posting…' : 'Post reply'}
-          </button>
-          <button
-            type="button"
-            onClick={onDone}
-            className="text-sm underline text-gray-600 hover:text-gray-800"
-          >
-            Cancel
-          </button>
-        </div>
-        {localErr && <p className="text-sm text-red-700">{localErr}</p>}
-      </form>
-    );
-  }
+  useEffect(() => {
+    void load();
+  }, [load]);
 
-  function CommentItem({ c }: { c: Row }) {
-    const children = items.filter((x) => x.parent_id === c.id);
+  // Handlers
+  const submitTopLevel = useCallback(async () => {
+    if (!message.trim()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { error: err } = await supabase.from('comments').insert({
+        slug,
+        name: name.trim() || null,
+        message: message.trim(),
+        parent_id: null,
+      });
+      if (err) throw err;
+      setMessage('');
+      setName('');
+      await load();
+      msgRef.current?.focus();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to post comment');
+    } finally {
+      setLoading(false);
+    }
+  }, [load, message, name, slug, supabase]);
 
-    return (
-      <li className="rounded-xl border border-gray-200 bg-white p-4">
-       <div className="text-sm text-gray-500">
-  <span className={`${pacifico.className} text-[#C44B5A] text-base`}>
-    {c.name || "Anonymous"}
-  </span>
-  <span className="mx-1">•</span>
-  {new Date(c.created_at).toLocaleString()}
-</div>
-        <p className="mt-1 text-gray-800 whitespace-pre-wrap">{c.message}</p>
+  const submitReply = useCallback(async () => {
+    if (!replyTo || !replyMessage.trim()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { error: err } = await supabase.from('comments').insert({
+        slug,
+        name: replyName.trim() || null,
+        message: replyMessage.trim(),
+        parent_id: replyTo,
+      });
+      if (err) throw err;
+      setReplyMessage('');
+      setReplyName('');
+      setReplyTo(null);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to post reply');
+    } finally {
+      setLoading(false);
+    }
+  }, [replyMessage, replyName, replyTo, slug, load, supabase]);
 
-   <button
-  onClick={() => setReplyingTo(replyingTo === c.id ? null : c.id)}
-  className="mt-3 inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm text-gray-800 hover:bg-gray-50"
->
-  {replyingTo === c.id ? 'Cancel' : 'Reply'}
-</button>
-
-
-        {replyingTo === c.id && (
-          <ReplyEditor parentId={c.id} onDone={() => setReplyingTo(null)} />
-        )}
-
-        {children.length > 0 && (
-          <ul className="mt-4 space-y-3 pl-4 border-l-2 border-gray-200">
-            {children.map((child) => (
-              <CommentItem key={child.id} c={child} />
-            ))}
-          </ul>
-        )}
-      </li>
-    );
-  }
-
-  const roots = items.filter((c) => !c.parent_id);
+  const tree = useMemo(() => buildTree(rows), [rows]);
 
   return (
-    <div className="mt-12">
-      <h3 className="font-semibold text-lg">Comments</h3>
+    <section className="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6">
+      <h2 className="text-lg font-semibold text-rose-900">Comments</h2>
 
-      {/* new top-level comment */}
-      <form
-        onSubmit={(e) => { e.preventDefault(); createComment(msg, null); }}
-        className="mt-4 space-y-3"
-      >
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name (optional)"
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
-        />
-        <textarea
-          value={msg}
-          onChange={(e) => setMsg(e.target.value)}
-          required
-          rows={4}
-          placeholder="Say something nice…"
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-black/10"
-        />
-        <button
-          type="submit"
-          disabled={sending || !msg.trim()}
-          className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-60"
-        >
-          {sending ? 'Posting…' : 'Post comment'}
-        </button>
-        {err && <p className="text-sm text-red-700">{err}</p>}
-      </form>
+      {error && <div className="mt-2 text-sm text-rose-800">{error}</div>}
+      {loading && rows.length === 0 && <div className="mt-2 text-sm text-gray-500">Loading…</div>}
 
-      {/* thread */}
-      <ul className="mt-6 space-y-4">
-        {roots.map((c) => (
-          <CommentItem key={c.id} c={c} />
+      {/* List */}
+      <div className="mt-4 space-y-6">
+        {tree.map((c) => (
+          <CommentItem
+            key={c.id}
+            node={c}
+            onReply={(id) => {
+              setReplyTo((cur) => (cur === id ? null : id));
+              setReplyName('');
+              setReplyMessage('');
+              setTimeout(() => replyRef.current?.focus(), 0);
+            }}
+          />
         ))}
-        {roots.length === 0 && (
-          <li className="text-sm text-gray-500">No comments yet.</li>
+
+        {tree.length === 0 && !loading && (
+          <div className="text-sm text-gray-500">No comments yet.</div>
         )}
-      </ul>
+      </div>
+
+      {/* Reply box (inline under the chosen comment) */}
+      {replyTo && (
+        <div className="mt-4 rounded-xl border border-rose-100 bg-rose-50 p-3">
+          <div className="text-xs text-gray-600">Replying…</div>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            <input
+              value={replyName}
+              onChange={(e) => setReplyName(e.target.value)}
+              placeholder="Your name (optional)"
+              className={`rounded-lg border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200 ${pacifico.className} text-rose-900`}
+            />
+            <textarea
+              ref={replyRef}
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              placeholder="Write a reply…"
+              maxLength={2000}
+              rows={3}
+              className="sm:col-span-2 rounded-lg border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+            />
+          </div>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={submitReply}
+              className="px-3 py-1.5 rounded-xl bg-rose-900 text-white hover:bg-rose-950 disabled:opacity-60"
+              disabled={loading || !replyMessage.trim()}
+            >
+              Reply
+            </button>
+            <button
+              type="button"
+              onClick={() => setReplyTo(null)}
+              className="px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* New comment */}
+      <div className="mt-6 border-t border-gray-200 pt-4">
+        <h3 className="font-medium text-gray-800">Add a comment</h3>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your name (optional)"
+            className={`rounded-lg border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200 ${pacifico.className} text-rose-900`}
+          />
+          <textarea
+            ref={msgRef}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Write something nice…"
+            maxLength={2000}
+            rows={4}
+            className="sm:col-span-2 rounded-lg border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-rose-200"
+          />
+        </div>
+        <div className="mt-2">
+          <button
+            type="button"
+            onClick={submitTopLevel}
+            className="px-4 py-2 rounded-xl bg-rose-900 text-white hover:bg-rose-950 disabled:opacity-60"
+            disabled={loading || !message.trim()}
+          >
+            Post
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CommentItem({
+  node,
+  onReply,
+}: {
+  node: CommentRow & { children: CommentRow[] };
+  onReply: (id: string) => void;
+}) {
+  return (
+    <div className="rounded-xl border border-gray-100 bg-white p-3">
+      <div className="flex items-center gap-2">
+        <span className={`${pacifico.className} text-rose-900`}>
+          {node.name || 'Anonymous'}
+        </span>
+        <span className="text-xs text-gray-500">• {fmtDate(node.created_at)}</span>
+      </div>
+      <p className="mt-2 whitespace-pre-wrap text-sm text-gray-800">{node.message}</p>
+      <div className="mt-2">
+        <button
+          type="button"
+          onClick={() => onReply(node.id)}
+          className="text-xs text-rose-900 hover:text-rose-950"
+        >
+          Reply
+        </button>
+      </div>
+
+      {node.children.length > 0 && (
+        <div className="mt-3 space-y-3 border-l-2 border-rose-100 pl-3">
+          {node.children.map((child) => (
+            <div key={child.id}>
+              <div className="flex items-center gap-2">
+                <span className={`${pacifico.className} text-rose-900`}>
+                  {child.name || 'Anonymous'}
+                </span>
+                <span className="text-xs text-gray-500">• {fmtDate(child.created_at)}</span>
+              </div>
+              <p className="mt-1 whitespace-pre-wrap text-sm text-gray-800">{child.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+
