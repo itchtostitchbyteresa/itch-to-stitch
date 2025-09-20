@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             alt={`Cover for ${post.title}`}
             className="rounded-xl mt-6 max-w-xl mx-auto"
           />
-          {/* eslint-disable-next-line react/no-danger */}
+         
           <div
             className="mt-6 text-gray-800"
             dangerouslySetInnerHTML={{ __html: post.html }}

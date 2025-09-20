@@ -14,6 +14,9 @@ type Row = {
   parent_id: string | null;
 };
 
+const load = React.useCallback(() => { /* ... */ }, []);
+React.useEffect(() => { load(); }, [load]);
+
 export function Comments({ slug }: { slug: string }) {
   const [items, setItems] = React.useState<Row[]>([]);
   const [name, setName] = React.useState('');

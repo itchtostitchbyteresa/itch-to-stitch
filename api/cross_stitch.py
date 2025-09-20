@@ -1,4 +1,3 @@
-# Dev-safe FastAPI for local and Vercel
 from io import BytesIO
 import base64
 import traceback
