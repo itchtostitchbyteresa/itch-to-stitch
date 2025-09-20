@@ -8,5 +8,18 @@ const nextConfig = {
     }
     return [];
   },
+
+    images: {
+    // Works on Next 13/14/15
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+    ],
+    // Optional: if you're on an older Next, this also works:
+    // domains: ['res.cloudinary.com'],
+  },
 };
 module.exports = nextConfig;
