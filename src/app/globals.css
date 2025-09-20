@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .img-row { @apply grid gap-2 grid-cols-2 md:grid-cols-3; }
+  .img-cell { @apply aspect-square overflow-hidden rounded-lg; }
+  .img-cell > img { @apply h-full w-full object-cover; }
+}
+
 
 @layer utilities {
   .font-logo { font-family: var(--font-pacifico), cursive; }

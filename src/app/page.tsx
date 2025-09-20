@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
 
@@ -46,26 +47,29 @@ function PostCard({ post, showTags = false }: PostCardProps) {
         <div className="text-xs text-gray-500">{formatDateISO(post.date)}</div>
         <h3 className="mt-1 font-semibold text-rose-900">{post.title}</h3>
         <p className="mt-2 text-sm text-gray-600 line-clamp-2">{post.excerpt}</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {showTags && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {post.tags.map((t) => (
-                <span
-                  key={t}
-                  className="text-xs px-2 py-0.5 rounded-full border border-gray-200 text-gray-600"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
+        {showTags && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {post.tags.map((t) => (
+              <span
+                key={t}
+                className="text-xs px-2 py-0.5 rounded-full border border-gray-200 text-gray-600"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   );
 }
 
+const PAGE_SIZE = 9;
+
 export default function Page() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [activeTag, setActiveTag] = useState<string>('all');
   const [q, setQ] = useState<string>('');
   const TOP_N_TAGS = 6;
@@ -82,7 +86,8 @@ export default function Page() {
     return ['all', ...sorted];
   }, []);
 
-  const list = useMemo(() => {
+  // Filtered list (by tag + search)
+  const filtered = useMemo(() => {
     return POSTS.filter(
       (p) =>
         (activeTag === 'all' || p.tags.includes(activeTag)) &&
@@ -90,6 +95,43 @@ export default function Page() {
           p.excerpt.toLowerCase().includes(q.toLowerCase()))
     );
   }, [activeTag, q]);
+
+  // Pagination: read from URL
+  const rawPage = Number(searchParams.get('page') || '1');
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(Math.max(isNaN(rawPage) ? 1 : rawPage, 1), totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  // When filters/search change, reset to page 1 in the URL
+  useEffect(() => {
+    const sp = new URLSearchParams(searchParams);
+    if (sp.has('page')) {
+      sp.delete('page');
+      router.replace('?' + sp.toString());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTag, q]);
+
+  const goToPage = (n: number, opts: { replace?: boolean } = {}) => {
+    const target = Math.min(Math.max(n, 1), Math.max(totalPages, 1));
+    const sp = new URLSearchParams(searchParams);
+    if (target === 1) sp.delete('page');
+    else sp.set('page', String(target));
+    const url = '?' + sp.toString();
+    (opts.replace ? router.replace : router.push)(url);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Build compact page numbers (1 … prev, current, next … last)
+  const pageList = (() => {
+    const pages = new Set<number>([1, totalPages, currentPage, currentPage - 1, currentPage + 1, 2, totalPages - 1]);
+    return [...pages]
+      .filter((n) => n >= 1 && n <= totalPages)
+      .sort((a, b) => a - b);
+  })();
 
   const GALLERY: { src: string; alt: string; href?: string }[] = [
     {
@@ -143,7 +185,11 @@ export default function Page() {
         <section className="mt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             {topTags.map((t) => (
-              <TagChip key={t} active={t === activeTag} onClick={() => setActiveTag(t)}>
+              <TagChip
+                key={t}
+                active={t === activeTag}
+                onClick={() => setActiveTag(t)}
+              >
                 {t}
               </TagChip>
             ))}
@@ -162,15 +208,70 @@ export default function Page() {
           </div>
         </section>
 
-        {/* Feed */}
+        {/* Feed (paginated) */}
         <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {list.map((p) => (
+          {pageItems.map((p) => (
             <PostCard key={p.slug} post={p} />
           ))}
-          {list.length === 0 && (
-            <div className="col-span-full text-center text-gray-500 py-16">No posts yet.</div>
+          {filtered.length === 0 && (
+            <div className="col-span-full text-center text-gray-500 py-16">
+              No posts yet.
+            </div>
           )}
         </section>
+
+        {/* Pagination controls */}
+        {filtered.length > 0 && totalPages > 1 && (
+          <nav
+            className="mt-8 flex items-center justify-center gap-2"
+            aria-label="Pagination"
+          >
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 rounded-xl border border-gray-200 disabled:opacity-40"
+            >
+              Prev
+            </button>
+
+            {/* Numbered buttons with ellipses */}
+            <div className="flex items-center gap-1">
+              {pageList.map((n, i) => {
+                const prev = pageList[i - 1];
+                const showDots = i > 0 && prev !== undefined && n - prev > 1;
+                return (
+                  <React.Fragment key={n}>
+                    {showDots && <span className="px-1 text-gray-400">…</span>}
+                    <button
+                      onClick={() => goToPage(n)}
+                      aria-current={n === currentPage ? 'page' : undefined}
+                      className={
+                        'px-3 py-1 rounded-xl border ' +
+                        (n === currentPage
+                          ? 'bg-rose-900 text-white border-rose-900'
+                          : 'border-gray-200 hover:border-gray-300')
+                      }
+                    >
+                      {n}
+                    </button>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 rounded-xl border border-gray-200 disabled:opacity-40"
+            >
+              Next
+            </button>
+
+            <span className="ml-3 text-xs text-gray-500">
+              Page {currentPage} of {totalPages}
+            </span>
+          </nav>
+        )}
 
         {/* Contact only (subscribe shelved) */}
         <section className="mt-14">
@@ -195,3 +296,4 @@ export default function Page() {
     </div>
   );
 }
+

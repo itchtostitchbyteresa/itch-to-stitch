@@ -20,8 +20,17 @@ slug: "tote-bag",
      alt="crochet rosette tote bag"
      class="w-full md:w-1/3 rounded-xl" />
     <p class="text-gray-700 leading-relaxed">
+    <ul class="list-disc pl-5 space-y-1">
+  <li>
     This was the center of a crochet blanket that I never finished. It was too beautiful to frog it, 
-    so I decided to give it another use. Unfortunately, I lost the original pattern.😭
+    so I decided to give it another use. 
+    </li>
+    <li>
+    The crochet flower is the free pattern
+    <a href="https://www.mellieblossom.com/free-tropical-delight-crochet-pattern/" 
+      target="_blank" class="underline text-rose-700 hover:text-rose-900">Tropical Delight</a> with small alterations.
+</li>
+
     </p>
 </div>
   
@@ -34,7 +43,9 @@ slug: "tote-bag",
       target="_blank" class="underline text-rose-700 hover:text-rose-900">Michaels Canada</a>, and <strong>it 
       measures 13.5″ × 13.5″</strong> (and believe me, it is much sturdier than it looks😉). 
     But you can grab any blanck bag you can find. I know Amazon.ca sells them in bulk 
-    with different colors and sizes (some, even have zipers!)  
+    with different colors and sizes (some, even have zipers!).
+    I pinned it in place and used hot glue to attach it. Simple and fast. 
+Be careful if you do this instead of sewing because the heat during washing can loosen the glue.
 </p>
   </div>
   <div class="md:w-1/3">
@@ -45,11 +56,6 @@ slug: "tote-bag",
     />
   </div>
 </div>
-
-<h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">Attaching and Care</h2>
-<p>I pinned it in place and used hot glue to attach it. Simple and fast. 
-Be careful if you do this instead of sewing because the heat during washing can loosen the glue.
-</p>
 
 <h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">Pattern Options</h2>
 
@@ -64,9 +70,9 @@ original pattern, I searched Ravelry for rosette and mandala patterns. So far, I
       class="rounded-xl w-full object-cover"
     />
     <figcaption class="text-sm text-gray-600 mt-2 text-center">
-      Based on this
+      Based on the
       <a href="https://www.ravelry.com/patterns/library/jaina-mandala" 
-      target="_blank" class="underline text-rose-700 hover:text-rose-900">pattern</a>
+      target="_blank" class="underline text-rose-700 hover:text-rose-900">Jaina mandala</a> free pattern.
     </figcaption>
   </figure>
 
@@ -77,9 +83,9 @@ original pattern, I searched Ravelry for rosette and mandala patterns. So far, I
       class="rounded-xl w-full object-cover"
     />
     <figcaption class="text-sm text-gray-600 mt-2 text-center">
-     Based on this
+     Based on the
       <a href="https://www.ravelry.com/patterns/library/peacock-feather-mandala" 
-      target="_blank" class="underline text-rose-700 hover:text-rose-900">pattern</a>
+      target="_blank" class="underline text-rose-700 hover:text-rose-900">Peacock Feather Mandala</a> free pattern.
     </figcaption>
   </figure>
 </div>

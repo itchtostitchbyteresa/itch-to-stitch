@@ -7,7 +7,7 @@ slug: "tote-bag-neverending",
   excerpt:
     "Old idea, different flower.🏵️",
   cover:
-    "https://res.cloudinary.com/dl7fmgr2s/image/upload/v1757705954/crochet_tote_bag_invkhv.png",
+    "https://res.cloudinary.com/dl7fmgr2s/image/upload/v1758402396/20250920_130829_tdyrpg.jpg",
   html: `
   
   <p class="text-center">Old idea, different flower.🏵️</p>
@@ -49,9 +49,6 @@ slug: "tote-bag-neverending",
     I pinned the crochet flower in place and used hot glue to attach it. Simple and fast! 😅 
 Be careful if you do this instead of sewing because heat during washing can loosen the glue.
  </li>
-  
-
-
 </p>
   </div>
   <div class="md:w-1/3">
@@ -63,6 +60,38 @@ Be careful if you do this instead of sewing because heat during washing can loos
   </div>
 </div>
 
+
+<h2 class="font-logo text-rose-700 text-2xl mt-10 mb-3">Pattern Options</h2>
+
+<p>I like this bag so much that I’m making extras to give away as Christmas gifts.🤶🏻</p>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">
+  <figure>
+    <img
+      src="https://res.cloudinary.com/dl7fmgr2s/image/upload/v1758402751/20250920_130859_by3alm.jpg"
+      alt="mandala tote bag black crochet"
+      class="rounded-xl w-full object-cover"
+    />
+    <figcaption class="text-sm text-gray-600 mt-2 text-center">
+      Based on the
+      <a href="https://www.ravelry.com/patterns/library/jaina-mandala" 
+      target="_blank" class="underline text-rose-700 hover:text-rose-900">Jaina mandala</a> free pattern
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img
+      src="https://res.cloudinary.com/dl7fmgr2s/image/upload/v1758402941/20250920_131034_syy4ar.jpg"
+      alt="tote bag green flower crochet"
+      class="rounded-xl w-full object-cover"
+    />
+    <figcaption class="text-sm text-gray-600 mt-2 text-center">
+     Based on the
+      <a href="https://www.mellieblossom.com/free-tropical-delight-crochet-pattern/" 
+      target="_blank" class="underline text-rose-700 hover:text-rose-900">Tropical Delight</a> free pattern.
+    </figcaption>
+  </figure>
+</div>
 
 
 
