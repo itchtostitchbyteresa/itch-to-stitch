@@ -1,6 +1,6 @@
 // src/app/posts/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import { POSTS, formatDateISO } from "@/lib/posts"; // ← removed unused SITE_TITLE
+import { POSTS, formatDateISO } from "@/lib/posts";
 import { Header } from "@/components/Header";
 import { Pacifico } from "next/font/google";
 import Link from "next/link";
@@ -46,9 +46,8 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return notFound();
 
-  // --- Related posts: up to 3 by tag overlap, then backfill with most recent ---
+  // Related posts pick
   const others = POSTS.filter((p) => p.slug !== slug);
-
   const overlap = (a: string[], b: string[]) => a.filter((t) => b.includes(t)).length;
 
   const similar = others
@@ -66,13 +65,12 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   );
 
   const picks: typeof others = [];
-  for (const p of similar) {
-    if (picks.length < 3) picks.push(p);
-  }
-  for (const p of recent) {
-    if (picks.length < 3 && !picks.includes(p)) picks.push(p);
-  }
-  // ---------------------------------------------------------------------------
+  for (const p of similar) if (picks.length < 3) picks.push(p);
+  for (const p of recent) if (picks.length < 3 && !picks.includes(p)) picks.push(p);
+
+  // Prefer real dimensions if you have them on each post; fallback keeps aspect ok.
+  const coverW = (post as any).coverWidth ?? 1600;
+  const coverH = (post as any).coverHeight ?? 900;
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-gray-900">
@@ -84,14 +82,15 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             {post.title}
           </h1>
 
-          {/* Cover image with next/image */}
-          <div className="relative mt-6 w-full max-w-xl mx-auto aspect-[4/3] rounded-xl overflow-hidden">
+          {/* Cover: centered, capped width (smaller), rounded, no crop */}
+          <div className="mt-5 mx-auto max-w-2xl">
             <Image
               src={post.cover}
               alt={`Cover for ${post.title}`}
-              fill
-              sizes="(min-width:1024px) 40rem, 100vw"
-              className="object-cover"
+              width={coverW}
+              height={coverH}
+              sizes="(min-width:1024px) 42rem, 100vw"
+              className="w-full h-auto rounded-2xl border border-gray-200"
               priority={false}
             />
           </div>
@@ -102,7 +101,6 @@ export default async function Page({ params }: { params: Promise<Params> }) {
           />
         </article>
 
-        {/* Related row (moved BEFORE comments) */}
         {picks.length > 0 && (
           <section className="mt-12">
             <h2 className={`text-xl text-rose-900 ${pacifico.className}`}>You might also like</h2>
@@ -113,13 +111,13 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                   href={`/posts/${rp.slug}`}
                   className="group block rounded-2xl overflow-hidden bg-white shadow hover:shadow-md transition"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative overflow-hidden min-h-[160px] sm:min-h-[180px] md:min-h-[200px]">
                     <Image
                       src={rp.cover}
                       alt={`Cover for ${rp.title}`}
                       fill
                       sizes="(min-width:1024px) 20rem, (min-width:640px) 50vw, 100vw"
-                      className="object-cover group-hover:scale-105 transition"
+                      className="object-cover transition group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>
@@ -165,10 +163,10 @@ export default async function Page({ params }: { params: Promise<Params> }) {
         />
       </main>
 
-      {/* keep your footer or use the shared <Footer /> in layout */}
-      <footer className="text-center text-xs text-gray-500 py-12">
-
-      </footer>
+      <footer className="text-center text-xs text-gray-500 py-12"></footer>
     </div>
   );
 }
+
+
+

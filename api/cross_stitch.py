@@ -19,7 +19,7 @@ def status():
 @app.post("/api/cross_stitch")
 async def cross_stitch(
     image_url: Optional[str] = Form(default=None),
-    max_size: int = Form(default=150),
+    max_size: int = Form(default=100),
     image: Optional[UploadFile] = File(default=None),
 ):
     try:

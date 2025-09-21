@@ -20,9 +20,12 @@ def _rgba_to_rgb_over_white(img: Image.Image) -> Image.Image:
     return img.convert("RGB")
 
 def resize_keep_ratio(img: Image.Image, max_size: int) -> Image.Image:
+    """Cap the LONGEST side to max_size (≤100), scale the other side proportionally."""
     w, h = img.size
-    max_size = max(16, min(600, int(max_size)))
+    max_size = max(16, min(100, int(max_size)))  # hard cap at 100
     if max(w, h) <= max_size:
         return img
     scale = max(w, h) / float(max_size)
-    return img.resize((int(round(w / scale)), int(round(h / scale))), Image.NEAREST)
+    new_w, new_h = int(round(w / scale)), int(round(h / scale))
+    return img.resize((new_w, new_h), Image.NEAREST)
+
