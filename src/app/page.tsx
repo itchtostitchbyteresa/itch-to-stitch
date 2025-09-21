@@ -5,6 +5,7 @@ import Link from 'next/link';
 import NextImage from 'next/image';
 import { POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer'; // 👈 import your Footer
 
 type TagChipProps = {
   active: boolean;
@@ -172,7 +173,7 @@ function HomeInner() {
         )}
       </section>
 
-      {/* Contact only (subscribe shelved) */}
+      {/* Contact only */}
       <section className="mt-14">
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <h3 className="font-semibold text-lg">Say hi</h3>
@@ -193,16 +194,14 @@ function HomeInner() {
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-gray-900">
+    <div className="min-h-screen bg-[#faf7f2] text-gray-900 flex flex-col">
       <Header />
-      <main className="max-w-6xl mx-auto px-6 mt-8 mb-20">
+      <main className="flex-1 max-w-6xl mx-auto px-6 mt-8 mb-20">
         <Suspense fallback={<div className="text-sm text-gray-500">Loading…</div>}>
           <HomeInner />
         </Suspense>
       </main>
-      <footer className="text-center text-xs text-gray-500 py-12">
-        © {new Date().getFullYear()} {SITE_TITLE} • Built with ❤️ and Next.js
-      </footer>
+      <Footer /> {/* 👈 drop it in */}
     </div>
   );
 }
