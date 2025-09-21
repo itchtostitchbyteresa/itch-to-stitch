@@ -1,14 +1,11 @@
-// /app/posts/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import { POSTS, formatDateISO, SITE_TITLE } from "@/lib/posts";
+import { POSTS, formatDateISO } from "@/lib/posts";
 import { Header } from "@/components/Header";
 import { Pacifico } from "next/font/google";
 import Link from "next/link";
 import type { Metadata } from "next";
+import AdUnit from "@/components/AdUnit"; // <-- use the ad component
 import { Comments } from "@/components/Comments";
-
-// ⬇️ AdSense sidebar components
-import AdUnit from "@/components/AdUnit"; // expects a prop: slot="YOUR_SLOT_ID"
 
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
 
@@ -17,7 +14,7 @@ type Params = { slug: string };
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
-  const { slug } = await params; // your Next needs await
+  const { slug } = await params;
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return {};
 
@@ -67,22 +64,17 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   );
 
   const picks: typeof others = [];
-  for (const p of similar) {
-    if (picks.length < 3) picks.push(p);
-  }
-  for (const p of recent) {
-    if (picks.length < 3 && !picks.includes(p)) picks.push(p);
-  }
+  for (const p of similar) if (picks.length < 3) picks.push(p);
+  for (const p of recent) if (picks.length < 3 && !picks.includes(p)) picks.push(p);
   // ---------------------------------------------------------------------------
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-gray-900">
       <Header />
-
-      {/* Widen container so we can have a sidebar */}
-      <main className="max-w-6xl mx-auto px-6 mt-8 mb-20">
+      <main className="max-w-6xl mx-auto px-6 mt-8 mb-16">
+        {/* 12-col grid: article + sidebar. Sidebar is visible on lg+. */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main article column */}
+          {/* Article */}
           <article className="lg:col-span-8 prose prose-neutral max-w-none">
             <div className="text-xs text-gray-500">{formatDateISO(post.date)}</div>
             <h1 className={`mt-1 text-3xl font-extrabold text-rose-900 ${pacifico.className}`}>
@@ -92,7 +84,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
             <img
               src={post.cover}
               alt={`Cover for ${post.title}`}
-              className="rounded-xl mt-6 w-full max-w-xl mx-auto"
+              className="rounded-xl mt-6 max-w-xl mx-auto"
             />
 
             <div
@@ -100,10 +92,12 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               dangerouslySetInnerHTML={{ __html: post.html }}
             />
 
-            {/* Related row (kept BEFORE comments) */}
+            {/* Related posts */}
             {picks.length > 0 && (
-              <section className="mt-12 not-prose">
-                <h2 className={`text-xl text-rose-900 ${pacifico.className}`}>You might also like</h2>
+              <section className="mt-12">
+                <h2 className={`text-xl text-rose-900 ${pacifico.className}`}>
+                  You might also like
+                </h2>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {picks.slice(0, 3).map((rp) => (
                     <Link
@@ -120,7 +114,9 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                         />
                       </div>
                       <div className="p-3">
-                        <div className="text-[11px] text-gray-500">{formatDateISO(rp.date)}</div>
+                        <div className="text-[11px] text-gray-500">
+                          {formatDateISO(rp.date)}
+                        </div>
                         <div className="mt-0.5 font-semibold text-rose-900 line-clamp-2">
                           {rp.title}
                         </div>
@@ -134,15 +130,14 @@ export default async function Page({ params }: { params: Promise<Params> }) {
               </section>
             )}
 
-            {/* Comments + back link */}
-            <div className="mt-10 not-prose">
+            <div className="mt-10">
               <Comments slug={post.slug} />
               <Link href="/" className="underline">
                 ← Back to posts
               </Link>
             </div>
 
-            {/* SEO JSON-LD */}
+            {/* SEO schema */}
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
@@ -156,39 +151,28 @@ export default async function Page({ params }: { params: Promise<Params> }) {
                   author: { "@type": "Person", name: "Teresa" },
                   mainEntityOfPage: {
                     "@type": "WebPage",
-                    "@id": `https://itchtostitchbyTeresa.com/posts/${slug}`, // ← replace with your real domain if different
+                    "@id": `https://itchtostitchbyteresa.com/posts/${slug}`,
                   },
                 }),
               }}
             />
           </article>
 
-          {/* Sidebar column with ads */}
-          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-8 h-max">
-            {/* Ad block #1 */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-3">
-              {/* Set a min-height so the card doesn't collapse while the ad loads */}
-              <div className="min-h-[280px] flex items-center justify-center">
-                <AdUnit slot="SIDEBAR_SLOT_1" />
-              </div>
+          {/* Sidebar with ads (visible on lg and up) */}
+          <aside className="lg:col-span-4 space-y-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              {/* Replace with your actual AdSense slot id for this placement */}
+              <AdUnit slot="YOUR_SIDEBAR_SLOT_ID_1" />
             </div>
-
-            {/* Ad block #2 (optional second slot) */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-3">
-              <div className="min-h-[280px] flex items-center justify-center">
-                <AdUnit slot="SIDEBAR_SLOT_2" />
-              </div>
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <AdUnit slot="YOUR_SIDEBAR_SLOT_ID_2" />
             </div>
-
-            {/* Optional: a small “support the site” box */}
-            {/* <div className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
-              <p>Enjoying the notes? Sharing a link helps a lot 💛</p>
-            </div> */}
           </aside>
         </div>
       </main>
-
-   
+      {/* Footer comes from global layout; don’t add another here */}
     </div>
   );
 }
+
+

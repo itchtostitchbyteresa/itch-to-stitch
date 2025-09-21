@@ -5,7 +5,7 @@ import Link from 'next/link';
 import NextImage from 'next/image';
 import { POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer'; // 👈 import your Footer
+
 
 type TagChipProps = {
   active: boolean;
@@ -201,7 +201,7 @@ export default function Page() {
           <HomeInner />
         </Suspense>
       </main>
-      <Footer /> {/* 👈 drop it in */}
+     
     </div>
   );
 }

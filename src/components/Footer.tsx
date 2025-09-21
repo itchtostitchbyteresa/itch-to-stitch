@@ -17,6 +17,8 @@ export function Footer() {
             <Link href="/tools/cross-stitch" className="hover:underline hover:text-white">
               Cross-Stitch Generator
             </Link>
+            <Link href="/privacy" className="hover:underline hover:text-white">Privacy</Link>
+            <Link href="/terms" className="hover:underline hover:text-white">Terms</Link>
           </nav>
 
           {/* Right: socials, inline */}
@@ -27,7 +29,6 @@ export function Footer() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 hover:underline hover:text-white"
             >
-              {/* simple icon */}
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2}>
                 <rect x="3" y="3" width="18" height="18" rx="5" />
                 <path d="M16.5 7.5h.01" />
@@ -65,7 +66,7 @@ export function Footer() {
 
         {/* Bottom line, centered */}
         <p className="mt-3 text-center text-[13px] leading-5 text-rose-100">
-          © {year} • Built with <span className="text-white">❤️</span> and{" "}
+           © {new Date().getFullYear()} • Built with <span className="text-white">❤️</span> and{" "}
           <a
             href="https://nextjs.org/"
             target="_blank"
@@ -79,4 +80,3 @@ export function Footer() {
     </footer>
   );
 }
-
