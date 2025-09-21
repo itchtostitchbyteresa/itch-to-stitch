@@ -76,7 +76,7 @@ export function Header() {
 
         {/* Desktop row: 3 columns */}
         <div className="hidden md:grid md:grid-cols-3 md:items-center">
-          {/* Left: Logo + Title (moved here) */}
+          {/* Left: Logo + Title */}
           <Link href="/" className="flex items-center gap-3">
             <img
               src={LOGO_URL}
@@ -115,10 +115,11 @@ export function Header() {
             </SocialLink>
           </div>
 
-          {/* Right: Nav (moved here) */}
+          {/* Right: Nav */}
           <nav className="flex gap-6 text-sm justify-self-end">
             <Link href="/" className="hover:underline">Home</Link>
             <Link href="/about" className="hover:underline">About</Link>
+            <Link href="/tools/cross-stitch" className="hover:underline">Tools</Link>
             {/* <Link href="/contact" className="hover:underline">Contact</Link> */}
           </nav>
         </div>
@@ -132,6 +133,7 @@ export function Header() {
             <nav className="flex flex-col gap-2 text-sm">
               <Link href="/" onClick={() => setOpen(false)} className="hover:underline">Home</Link>
               <Link href="/about" onClick={() => setOpen(false)} className="hover:underline">About</Link>
+              <Link href="/tools/cross-stitch" onClick={() => setOpen(false)} className="hover:underline">Tools</Link>
               <Link href="/contact" onClick={() => setOpen(false)} className="hover:underline">Contact</Link>
             </nav>
             <div className="mt-3 flex gap-3">
