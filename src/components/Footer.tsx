@@ -1,4 +1,4 @@
-// /components/Footer.tsx
+// src/components/Footer.tsx
 import Link from "next/link";
 
 export function Footer() {
@@ -66,7 +66,7 @@ export function Footer() {
 
         {/* Bottom line, centered */}
         <p className="mt-3 text-center text-[13px] leading-5 text-rose-100">
-           © {new Date().getFullYear()} • Built with <span className="text-white">❤️</span> and{" "}
+          © {year} • Built with <span className="text-white">❤️</span> and{" "}
           <a
             href="https://nextjs.org/"
             target="_blank"
@@ -80,3 +80,4 @@ export function Footer() {
     </footer>
   );
 }
+

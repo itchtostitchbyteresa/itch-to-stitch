@@ -1,79 +1,67 @@
+// src/components/AdUnit.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-// Minimal, resilient AdSense unit that avoids "No slot size for availableWidth=0"
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
+
+type Props = {
+  /** Your AdSense slot id, e.g. "1234567890" */
+  slot: string;
+  /** Ad format */
+  format?: "auto" | "rectangle" | "vertical" | "horizontal";
+  /** Responsive setting (AdSense expects string "true"/"false") */
+  responsive?: "true" | "false";
+  /** Extra tailwind/classes */
+  className?: string;
+};
+
+/**
+ * Safe AdSense unit component.
+ * - No TypeScript ignores
+ * - Guards against SSR and HMR
+ * - Provides minimal height to avoid "availableWidth=0" at mount
+ */
 export default function AdUnit({
   slot,
-  className = "",
   format = "auto",
-  client = "ca-pub-4061217113594467", // <-- your client id
-  responsive = true,
-}: {
-  slot: string;
-  className?: string;
-  format?: "auto" | "fluid" | string;
-  client?: string;
-  responsive?: boolean;
-}) {
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  // Mount only on client
-  useEffect(() => setMounted(true), []);
+  responsive = "true",
+  className = "",
+}: Props) {
+  const ref = useRef<HTMLModElement>(null);
 
   useEffect(() => {
-    if (!mounted || !wrapRef.current) return;
+    if (typeof window === "undefined") return;
+    if (!ref.current) return;
 
-    const ins = wrapRef.current.querySelector("ins.adsbygoogle") as HTMLElement | null;
-    if (!ins) return;
+    // Ensure the ins has some initial size to avoid "availableWidth=0"
+    // (use CSS too, but this helps on first paint)
+    if (ref.current && ref.current.style.minHeight === "") {
+      ref.current.style.minHeight = "250px";
+      ref.current.style.minWidth = "300px";
+    }
 
-    // Only push when width > 0
-    const tryPush = () => {
-      // If the element (or any parent) is display:none, offsetParent === null
-      const visible = ins.offsetParent !== null && ins.offsetWidth > 0;
-      if (!visible) return false;
-
-      try {
-        // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch {
-        /* ignore */
-      }
-      return true;
-    };
-
-    // First attempt
-    if (tryPush()) return;
-
-    // Retry on size changes until it becomes visible
-    const ro = new ResizeObserver(() => {
-      if (tryPush()) ro.disconnect();
-    });
-    ro.observe(ins);
-
-    // As a safety, also retry on window resize
-    const onResize = () => tryPush();
-    window.addEventListener("resize", onResize);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", onResize);
-    };
-  }, [mounted, slot]);
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch {
+      // AdSense can throw during dev/HMR; safe to ignore
+    }
+  }, [slot]);
 
   return (
-    <div ref={wrapRef} className={className} suppressHydrationWarning>
-      {mounted && (
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client={client}
-          data-ad-slot={slot}
-          data-ad-format={format}
-          {...(responsive ? { "data-full-width-responsive": "true" } : {})}
-        />
-      )}
-    </div>
+    <ins
+      ref={ref}
+      className={`adsbygoogle ${className}`}
+      style={{ display: "block", minHeight: "250px" }}
+      data-ad-client="ca-pub-4061217113594467" // ← your client id
+      data-ad-slot={slot}
+      data-ad-format={format}
+      data-full-width-responsive={responsive}
+    />
   );
 }
+
