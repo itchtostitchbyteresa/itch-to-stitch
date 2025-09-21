@@ -1,14 +1,12 @@
-// /app/posts/[slug]/page.tsx
+// src/app/posts/[slug]/page.tsx
 import { notFound } from "next/navigation";
-import { POSTS, formatDateISO, SITE_TITLE } from "@/lib/posts";
+import { POSTS, formatDateISO } from "@/lib/posts"; // ← removed unused SITE_TITLE
 import { Header } from "@/components/Header";
 import { Pacifico } from "next/font/google";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Comments } from "@/components/Comments";
-
-// ⬇️ AdSense sidebar components
-import AdUnit from "@/components/AdUnit"; // expects a prop: slot="YOUR_SLOT_ID"
+import Image from "next/image";
 
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
 
@@ -17,7 +15,7 @@ type Params = { slug: string };
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
-  const { slug } = await params; // your Next needs await
+  const { slug } = await params;
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return {};
 
@@ -50,6 +48,7 @@ export default async function Page({ params }: { params: Promise<Params> }) {
 
   // --- Related posts: up to 3 by tag overlap, then backfill with most recent ---
   const others = POSTS.filter((p) => p.slug !== slug);
+
   const overlap = (a: string[], b: string[]) => a.filter((t) => b.includes(t)).length;
 
   const similar = others
@@ -78,117 +77,98 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   return (
     <div className="min-h-screen bg-[#faf7f2] text-gray-900">
       <Header />
+      <main className="max-w-3xl mx-auto px-6 mt-8 mb-20">
+        <article className="prose prose-neutral max-w-none">
+          <div className="text-xs text-gray-500">{formatDateISO(post.date)}</div>
+          <h1 className={`mt-1 text-3xl font-extrabold text-rose-900 ${pacifico.className}`}>
+            {post.title}
+          </h1>
 
-      {/* Widen container so we can have a sidebar */}
-      <main className="max-w-6xl mx-auto px-6 mt-8 mb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main article column */}
-          <article className="lg:col-span-8 prose prose-neutral max-w-none">
-            <div className="text-xs text-gray-500">{formatDateISO(post.date)}</div>
-            <h1 className={`mt-1 text-3xl font-extrabold text-rose-900 ${pacifico.className}`}>
-              {post.title}
-            </h1>
-
-            <img
+          {/* Cover image with next/image */}
+          <div className="relative mt-6 w-full max-w-xl mx-auto aspect-[4/3] rounded-xl overflow-hidden">
+            <Image
               src={post.cover}
               alt={`Cover for ${post.title}`}
-              className="rounded-xl mt-6 w-full max-w-xl mx-auto"
+              fill
+              sizes="(min-width:1024px) 40rem, 100vw"
+              className="object-cover"
+              priority={false}
             />
+          </div>
 
-            <div
-              className="mt-6 text-gray-800"
-              dangerouslySetInnerHTML={{ __html: post.html }}
-            />
+          <div
+            className="mt-6 text-gray-800"
+            dangerouslySetInnerHTML={{ __html: post.html }}
+          />
+        </article>
 
-            {/* Related row (kept BEFORE comments) */}
-            {picks.length > 0 && (
-              <section className="mt-12 not-prose">
-                <h2 className={`text-xl text-rose-900 ${pacifico.className}`}>You might also like</h2>
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {picks.slice(0, 3).map((rp) => (
-                    <Link
-                      key={rp.slug}
-                      href={`/posts/${rp.slug}`}
-                      className="group block rounded-2xl overflow-hidden bg-white shadow hover:shadow-md transition"
-                    >
-                      <div className="aspect-[4/3] overflow-hidden">
-                        <img
-                          src={rp.cover}
-                          alt={`Cover for ${rp.title}`}
-                          className="h-full w-full object-cover group-hover:scale-105 transition"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="p-3">
-                        <div className="text-[11px] text-gray-500">{formatDateISO(rp.date)}</div>
-                        <div className="mt-0.5 font-semibold text-rose-900 line-clamp-2">
-                          {rp.title}
-                        </div>
-                        <div className="mt-1 text-xs text-gray-600 line-clamp-2">
-                          {rp.excerpt}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Comments + back link */}
-            <div className="mt-10 not-prose">
-              <Comments slug={post.slug} />
-              <Link href="/" className="underline">
-                ← Back to posts
-              </Link>
+        {/* Related row (moved BEFORE comments) */}
+        {picks.length > 0 && (
+          <section className="mt-12">
+            <h2 className={`text-xl text-rose-900 ${pacifico.className}`}>You might also like</h2>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {picks.slice(0, 3).map((rp) => (
+                <Link
+                  key={rp.slug}
+                  href={`/posts/${rp.slug}`}
+                  className="group block rounded-2xl overflow-hidden bg-white shadow hover:shadow-md transition"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={rp.cover}
+                      alt={`Cover for ${rp.title}`}
+                      fill
+                      sizes="(min-width:1024px) 20rem, (min-width:640px) 50vw, 100vw"
+                      className="object-cover group-hover:scale-105 transition"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-3">
+                    <div className="text-[11px] text-gray-500">{formatDateISO(rp.date)}</div>
+                    <div className="mt-0.5 font-semibold text-rose-900 line-clamp-2">
+                      {rp.title}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600 line-clamp-2">
+                      {rp.excerpt}
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
+          </section>
+        )}
 
-            {/* SEO JSON-LD */}
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@type": "BlogPosting",
-                  headline: post.title,
-                  description: post.excerpt,
-                  image: [post.cover],
-                  datePublished: post.date,
-                  author: { "@type": "Person", name: "Teresa" },
-                  mainEntityOfPage: {
-                    "@type": "WebPage",
-                    "@id": `https://itchtostitchbyTeresa.com/posts/${slug}`, // ← replace with your real domain if different
-                  },
-                }),
-              }}
-            />
-          </article>
-
-          {/* Sidebar column with ads */}
-          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-8 h-max">
-            {/* Ad block #1 */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-3">
-              {/* Set a min-height so the card doesn't collapse while the ad loads */}
-              <div className="min-h-[280px] flex items-center justify-center">
-                <AdUnit slot="SIDEBAR_SLOT_1" />
-              </div>
-            </div>
-
-            {/* Ad block #2 (optional second slot) */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-3">
-              <div className="min-h-[280px] flex items-center justify-center">
-                <AdUnit slot="SIDEBAR_SLOT_2" />
-              </div>
-            </div>
-
-            {/* Optional: a small “support the site” box */}
-            {/* <div className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
-              <p>Enjoying the notes? Sharing a link helps a lot 💛</p>
-            </div> */}
-          </aside>
+        <div className="mt-10">
+          <Comments slug={post.slug} />
+          <Link href="/" className="underline">
+            ← Back to posts
+          </Link>
         </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              headline: post.title,
+              description: post.excerpt,
+              image: [post.cover],
+              datePublished: post.date,
+              author: { "@type": "Person", name: "Teresa" },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://itchtostitchbyteresa.com/posts/${slug}`,
+              },
+            }),
+          }}
+        />
       </main>
 
-   
+      {/* keep your footer or use the shared <Footer /> in layout */}
+      <footer className="text-center text-xs text-gray-500 py-12">
+
+      </footer>
     </div>
   );
 }

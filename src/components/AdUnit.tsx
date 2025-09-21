@@ -3,9 +3,13 @@
 
 import { useEffect, useRef } from "react";
 
+type AdsByGoogleArray = {
+  push: (params?: Record<string, unknown>) => void;
+}[];
+
 declare global {
   interface Window {
-    adsbygoogle: any[];
+    adsbygoogle?: AdsByGoogleArray;
   }
 }
 
@@ -22,9 +26,9 @@ type Props = {
 
 /**
  * Safe AdSense unit component.
- * - No TypeScript ignores
- * - Guards against SSR and HMR
- * - Provides minimal height to avoid "availableWidth=0" at mount
+ * - Typed, no `any`
+ * - Guards SSR/HMR
+ * - Gives the slot a minimum size so AdSense doesn't see width=0
  */
 export default function AdUnit({
   slot,
@@ -38,17 +42,21 @@ export default function AdUnit({
     if (typeof window === "undefined") return;
     if (!ref.current) return;
 
-    // Ensure the ins has some initial size to avoid "availableWidth=0"
-    // (use CSS too, but this helps on first paint)
-    if (ref.current && ref.current.style.minHeight === "") {
+    // Minimum dimensions help avoid "availableWidth=0"
+    if (ref.current.style.minHeight === "") {
       ref.current.style.minHeight = "250px";
       ref.current.style.minWidth = "300px";
     }
 
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      const ads = (window.adsbygoogle = (window.adsbygoogle || []) as AdsByGoogleArray);
+      ads.push({
+          push: function (params?: Record<string, unknown>): void {
+              throw new Error("Function not implemented.");
+          }
+      });
     } catch {
-      // AdSense can throw during dev/HMR; safe to ignore
+      // dev/HMR can throw; safe to ignore
     }
   }, [slot]);
 
@@ -64,4 +72,3 @@ export default function AdUnit({
     />
   );
 }
-
