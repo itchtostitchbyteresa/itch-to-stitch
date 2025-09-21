@@ -1,15 +1,13 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Nunito, Pacifico } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react"; // 👈 import this
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-body" });
 const pacifico = Pacifico({ subsets: ["latin"], weight: "400", variable: "--font-pacifico" });
 
-
-
-
 const siteName = "Itch To Stitch by Teresa";
-const siteUrl = "https://itchtostitchbyTeresa.com"; 
+const siteUrl = "https://itchtostitchbyTeresa.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -33,9 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${nunito.variable} ${pacifico.variable} font-sans bg-[#faf7f2]`}>
         {children}
+        <Analytics /> {/* 👈 this enables Vercel Analytics */}
       </body>
     </html>
-    
   );
 }
 
