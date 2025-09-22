@@ -12,6 +12,9 @@ const pacifico = Pacifico({ subsets: ["latin"], weight: "400" });
 
 type Params = { slug: string };
 
+// Optional cover dimensions that some posts may include
+type WithCoverDims = { coverWidth?: number; coverHeight?: number };
+
 export async function generateMetadata(
   { params }: { params: Promise<Params> }
 ): Promise<Metadata> {
@@ -68,9 +71,10 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   for (const p of similar) if (picks.length < 3) picks.push(p);
   for (const p of recent) if (picks.length < 3 && !picks.includes(p)) picks.push(p);
 
-  // Prefer real dimensions if you have them on each post; fallback keeps aspect ok.
-  const coverW = (post as any).coverWidth ?? 1600;
-  const coverH = (post as any).coverHeight ?? 900;
+  // Intrinsic sizing for the cover (no explicit `any` casts)
+  const dims = post as unknown as WithCoverDims;
+  const coverW = dims.coverWidth ?? 1600;
+  const coverH = dims.coverHeight ?? 900;
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-gray-900">
@@ -167,6 +171,5 @@ export default async function Page({ params }: { params: Promise<Params> }) {
     </div>
   );
 }
-
 
 

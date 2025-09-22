@@ -3,7 +3,7 @@
 import React, { Suspense, useMemo, useState } from 'react';
 import Link from 'next/link';
 import NextImage from 'next/image';
-import { POSTS, SITE_TITLE, formatDateISO } from '@/lib/posts';
+import { POSTS, formatDateISO } from '@/lib/posts';
 import { Header } from '@/components/Header';
 
 
